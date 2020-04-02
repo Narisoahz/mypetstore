@@ -15,23 +15,12 @@ import java.util.List;
 @SpringBootTest
 @MapperScan("org.csu.mypetstore.persistence")
 class MypetstoreApplicationTests {
-//    @Autowired
-//CatalogService catalogService;
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Test
     void contextLoads() {
     }
-//    @Test
-//    void testCategory(){
-//Category c=catalogService.getCategory("BIRDS");
-//System.out.println(c.getCategoryId()+","+c.getName()+","+c.getDescription());
-//    }
-//@Test
-//    void testProduct(){
-//    List<Product> productList=catalogService.getProductListByCategory("BIRDS");
-//    System.out.println(productList.size());
-//}
+
 @Test
     void testAccount(){
     Account account=accountService.getAccount("1235");

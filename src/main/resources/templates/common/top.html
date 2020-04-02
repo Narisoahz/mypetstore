@@ -22,16 +22,21 @@
                          src="../../images/cart.gif" />
                 </a>
                 <img align="middle" src="../../images/separator.gif" />
-                <c:if test="${sessionScope.account== null}">
-                    <a href="viewSignIn">Sign In</a>
-                </c:if>
-                <c:if test="${sessionScope.account != null}">
-                    <%--            <c:if test="${!sessionScope.account.authenticated}">--%>
-                    <a href="signOff">Sign Out</a>
-                </c:if>
-                    <%--            </c:if>--%>
-                <img align="middle" src="../images/separator.gif" />
-                <a href="editAccount">My Account</a>
+<!--                <c:if test="${sessionScope.account== null}">-->
+<!--                    <a href="viewSignIn">Sign In</a>-->
+<!--                </c:if>-->
+<!--                <c:if test="${sessionScope.account != null}">-->
+<!--                    <%&#45;&#45;            <c:if test="${!sessionScope.account.authenticated}">&#45;&#45;%>-->
+<!--                    <a href="signOff">Sign Out</a>-->
+<!--                </c:if>-->
+<!--                    <%&#45;&#45;            </c:if>&#45;&#45;%>-->
+                <a th:if="${session.account} == null" href="/account/signonForm">Sign In</a>
+                <a th:if="(${session.account} != null) and (${!session.authenticated}) " href="/account/signonForm">Sign In</a>
+                <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/signoff">Sign Out</a>
+                <img th:if="(${session.account} != null) and (${session.authenticated})" align="middle" src="../images/separator.gif" />
+                <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/editAccountForm">My Account</a>
+<!--                <img align="middle" src="../images/separator.gif" />-->
+<!--                <a href="editAccount">My Account</a>-->
                 <img align="middle" src="../images/separator.gif" />
                 <a href="../help.html">?</a>
             </div>

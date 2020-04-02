@@ -1,7 +1,9 @@
 package org.csu.mypetstore;
 
+import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Product;
+import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
@@ -13,20 +15,27 @@ import java.util.List;
 @SpringBootTest
 @MapperScan("org.csu.mypetstore.persistence")
 class MypetstoreApplicationTests {
+//    @Autowired
+//CatalogService catalogService;
     @Autowired
-CatalogService catalogService;
+    AccountService accountService;
     @Test
     void contextLoads() {
     }
-    @Test
-    void testCategory(){
-Category c=catalogService.getCategory("BIRDS");
-System.out.println(c.getCategoryId()+","+c.getName()+","+c.getDescription());
-    }
+//    @Test
+//    void testCategory(){
+//Category c=catalogService.getCategory("BIRDS");
+//System.out.println(c.getCategoryId()+","+c.getName()+","+c.getDescription());
+//    }
+//@Test
+//    void testProduct(){
+//    List<Product> productList=catalogService.getProductListByCategory("BIRDS");
+//    System.out.println(productList.size());
+//}
 @Test
-    void testProduct(){
-    List<Product> productList=catalogService.getProductListByCategory("BIRDS");
-    System.out.println(productList.size());
+    void testAccount(){
+    Account account=accountService.getAccount("1235");
+    System.out.println(account.getUsername()+","+account.getPassword()+","+account.getBannerName());
 }
 
 

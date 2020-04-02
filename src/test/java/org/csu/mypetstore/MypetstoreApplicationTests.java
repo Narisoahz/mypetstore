@@ -14,16 +14,13 @@ import java.util.List;
 
 @SpringBootTest
 @MapperScan("org.csu.mypetstore.persistence")
+
 class MypetstoreApplicationTests {
     @Autowired
     private AccountService accountService;
-    @Test
-    void contextLoads() {
-    }
-
 @Test
     void testAccount(){
-    Account account=accountService.getAccount("1235");
+    Account account=accountService.getAccount("1235","123");
     System.out.println(account.getUsername()+","+account.getPassword()+","+account.getBannerName());
 }
 

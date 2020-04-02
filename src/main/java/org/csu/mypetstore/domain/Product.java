@@ -9,6 +9,25 @@ public class Product implements Serializable {
     private String categoryId;
     private String name;
     private String description;
+    private String descriptionImage;//图片
+    private String descriptionText;//文字
+
+    public String getDescriptionImage() {
+        return descriptionImage;
+    }
+
+    public void setDescriptionImage(String descriptionImage) {
+        this.descriptionImage = descriptionImage;
+    }
+
+    public String getDescriptionText() {
+        return descriptionText;
+    }
+
+    public void setDescriptionText(String descriptionText) {
+        this.descriptionText = descriptionText;
+    }
+
 
     public String getProductId() {
         return productId;

@@ -9,7 +9,7 @@
 <div th:replace="common/top"></div>
 <div id="Content">
     <div id="BackLink">
-        <a href="main">RETURN TO THE MENU</a>
+        <a href="/catalog/view">RETURN TO THE MENU</a>
     </div>
     <div id="Catalog">
 
@@ -21,7 +21,7 @@
                 <th>Name</th>
             </tr>
             <tr th:each="product:${productList}">
-                <td th:text="${product.productId}">product Id</td>
+                <td><a th:href="@{/catalog/viewProduct?productId=}+${product.productId}" th:text="${product.productId}">product Id</a></td>
                 <td th:text="${product.name}">product Name</td>
             </tr>
         </table>

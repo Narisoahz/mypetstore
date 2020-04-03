@@ -13,13 +13,11 @@
         </div>
 
         <div id="Banner">
-            <c:if test="${sessionScope.account != null }">
-                <%--            <c:if test="${sessionScope.accountBean.authenticated}">--%>
-                <c:if test="${sessionScope.account.bannerOption}">
-                    ${sessionScope.account.bannerName}
-                    <%--                </c:if>--%>
-            </c:if>
-            </c:if>
+            <label th:if="(${session.account}!=null) and (${session.authenticated})">
+               <img th:if="${session.account.bannerOption}"
+                    th:src="${#strings.arraySplit(session.account.bannerName,'&quot;')[1]}">
+            </label>
+
         </div>
 
     </div>

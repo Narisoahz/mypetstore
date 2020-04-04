@@ -10,6 +10,7 @@ import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.domain.Product;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
+import org.csu.mypetstore.tool.MD5keyBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,7 +53,12 @@ public String signonForm(){
 }
     @PostMapping("signon")
     public String signon(String username, String password,String msgcode, Model model,HttpSession session){
-        Account account = accountService.getAccount(username, password);
+       System.out.println(password);
+        String md5Pwd="";
+        MD5keyBean md5keyBean = new MD5keyBean();
+        md5Pwd=md5keyBean.getkeyBeanofStr(password);
+        System.out.println(md5Pwd);
+        Account account = accountService.getAccount(username,md5Pwd);
         if (account == null) {
             String msg = "Invalid username or password.  Signon failed.";
             model.addAttribute("msg", msg);
@@ -81,7 +87,6 @@ public String signonForm(){
                 model.addAttribute("msg1", msg1);
                 return "account/signon";
             }
-
         }
     }
 
@@ -102,8 +107,10 @@ public String signonForm(){
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
         return "account/new_account";
     }
+
     @PostMapping("/newAccount")
     public String newAccount(Account account,String repeatedPassword,Model model){
+        String md5Pwd="";
         if (account.getPassword() == null || account.getPassword().length() == 0 || repeatedPassword == null || repeatedPassword.length() == 0) {
             String msg = "密码不能为空";
             model.addAttribute("msg", msg);
@@ -113,6 +120,9 @@ public String signonForm(){
             model.addAttribute("msg", msg);
             return "account/new_account";
         } else {
+            MD5keyBean md5keyBean = new MD5keyBean();
+            md5Pwd=md5keyBean.getkeyBeanofStr(account.getPassword());
+            account.setPassword(md5Pwd);
             accountService.insertAccount(account);
             Account loginAccount = new Account();
             List<Product> myList = null;
@@ -132,6 +142,7 @@ public String signonForm(){
     }
     @PostMapping("/editAccount")
     public String editAccount(Account account,String repeatedPassword,Model model){
+        String md5Pwd="";
         if (account.getPassword() == null || account.getPassword().length() == 0 || repeatedPassword == null || repeatedPassword.length() == 0) {
             String msg = "密码不能为空";
             model.addAttribute("msg", msg);
@@ -141,6 +152,9 @@ public String signonForm(){
             model.addAttribute("msg", msg);
             return "account/edit_account";
         } else {
+            MD5keyBean md5keyBean = new MD5keyBean();
+            md5Pwd=md5keyBean.getkeyBeanofStr(account.getPassword());
+            account.setPassword(md5Pwd);
             accountService.updateAccount(account);
             account = accountService.getAccount(account.getUsername());
             List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
@@ -151,10 +165,11 @@ public String signonForm(){
             return "redirect:/catalog/view";
         }
     }
+    //发送验证码按钮
     @RequestMapping(value = "/sendSms")
     @ResponseBody
     public Object sendSMS(@RequestParam("phone") String phone, HttpServletRequest httpServletRequest){
-//        System.out.println(phone);
+        System.out.println(phone);
         try {
             //生成6位验证码
             String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);

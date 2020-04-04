@@ -9,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 @Controller
 @RequestMapping("/account")
@@ -128,5 +128,23 @@ public String signonForm(){
             model.addAttribute("authenticated", authenticated);
             return "redirect:/catalog/view";
         }
+    }
+    @RequestMapping(value = "/sendSms")
+    @ResponseBody
+    public void sendSMS(@RequestParam("phone") String phone, HttpServletRequest request){
+        System.out.println(phone);
+        //        StringBuilder code = new StringBuilder();
+//        Random random = new Random();
+//        // 生成6位验证码
+//        for (int i = 0; i < 6; i++) {
+//            code.append(String.valueOf(random.nextInt(10)));
+//        }
+//        HttpSession session = request.getSession();
+//        session.setAttribute("VALIDATE_PHONE", phone);
+//        session.setAttribute("VALIDATE_PHONE_CODE", code.toString());
+//        session.setAttribute("SEND_CODE_TIME", new Date().getTime());
+//        String smsText = "您的验证码是:"+code;
+//        SMSUtil.send(phone,smsText);
+//        return "success";
     }
 }

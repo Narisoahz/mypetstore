@@ -53,12 +53,10 @@ public String signonForm(){
 }
     @PostMapping("signon")
     public String signon(String username, String password,String msgcode, Model model,HttpSession session){
-       System.out.println(password);
         String md5Pwd="";
         MD5keyBean md5keyBean = new MD5keyBean();
         md5Pwd=md5keyBean.getkeyBeanofStr(password);
-        System.out.println(md5Pwd);
-        Account account = accountService.getAccount(username,md5Pwd);
+        Account account = accountService.getAccount(username, md5Pwd);
         if (account == null) {
             String msg = "Invalid username or password.  Signon failed.";
             model.addAttribute("msg", msg);
@@ -87,6 +85,7 @@ public String signonForm(){
                 model.addAttribute("msg1", msg1);
                 return "account/signon";
             }
+
         }
     }
 
@@ -169,7 +168,7 @@ public String signonForm(){
     @RequestMapping(value = "/sendSms")
     @ResponseBody
     public Object sendSMS(@RequestParam("phone") String phone, HttpServletRequest httpServletRequest){
-        System.out.println(phone);
+//        System.out.println(phone);
         try {
             //生成6位验证码
             String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);

@@ -1,5 +1,11 @@
 package org.csu.mypetstore.controller;
 
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.profile.IClientProfile;
 import org.csu.mypetstore.domain.Account;
 import org.csu.mypetstore.domain.Product;
 import org.csu.mypetstore.service.AccountService;
@@ -45,21 +51,37 @@ public String signonForm(){
     return "account/signon";
 }
     @PostMapping("signon")
-    public String signon(String username, String password, Model model){
+    public String signon(String username, String password,String msgcode, Model model,HttpSession session){
         Account account = accountService.getAccount(username, password);
-
         if (account == null) {
             String msg = "Invalid username or password.  Signon failed.";
             model.addAttribute("msg", msg);
             return "account/signon";
         } else {
-            account.setPassword(null);
-            List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
-            boolean authenticated = true;
-            model.addAttribute("account", account);
-            model.addAttribute("myList", myList);
-            model.addAttribute("authenticated", authenticated);
-            return "catalog/main";
+            if(session.getAttribute("verifyCodeCreateTime") !=null && (System.currentTimeMillis()-Long.valueOf(String.valueOf(session.getAttribute("verifyCodeCreateTime"))) )> 1000 * 60  ){
+                session.removeAttribute("verifyCode");
+                session.removeAttribute("verifyCodeCreateTime");
+                String msg1="验证码过期";
+                model.addAttribute("msg1", msg1);
+                return "account/signon";
+            }
+            else if (session.getAttribute("verifyCode") != null &&
+                    msgcode.equals(session.getAttribute("verifyCode"))){
+                account.setPassword(null);
+                List<Product> myList = catalogService.getProductListByCategory(account.getFavouriteCategoryId());
+                boolean authenticated = true;
+                model.addAttribute("account", account);
+                model.addAttribute("myList", myList);
+                model.addAttribute("authenticated", authenticated);
+                session.removeAttribute("verifyCode");
+                session.removeAttribute("verifyCodeCreateTime");
+                return "catalog/main";
+            }else{
+                String msg1="验证码错误";
+                model.addAttribute("msg1", msg1);
+                return "account/signon";
+            }
+
         }
     }
 
@@ -131,20 +153,45 @@ public String signonForm(){
     }
     @RequestMapping(value = "/sendSms")
     @ResponseBody
-    public void sendSMS(@RequestParam("phone") String phone, HttpServletRequest request){
-        System.out.println(phone);
-        //        StringBuilder code = new StringBuilder();
-//        Random random = new Random();
-//        // 生成6位验证码
-//        for (int i = 0; i < 6; i++) {
-//            code.append(String.valueOf(random.nextInt(10)));
-//        }
-//        HttpSession session = request.getSession();
-//        session.setAttribute("VALIDATE_PHONE", phone);
-//        session.setAttribute("VALIDATE_PHONE_CODE", code.toString());
-//        session.setAttribute("SEND_CODE_TIME", new Date().getTime());
-//        String smsText = "您的验证码是:"+code;
-//        SMSUtil.send(phone,smsText);
-//        return "success";
+    public Object sendSMS(@RequestParam("phone") String phone, HttpServletRequest httpServletRequest){
+//        System.out.println(phone);
+        try {
+            //生成6位验证码
+            String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);
+            //设置超时时间(不必修改)
+            System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
+            //(不必修改)
+            System.setProperty("sun.net.client.defaultReadTimeout", "10000");
+            //初始化ascClient，("***"分别填写自己的AccessKey ID和Secret)
+            IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4FxKTEFzFB3EG9E2fKss", "Gb7kB6BPh1d9MnaikUgaUgbnONFaTl");
+            //(不必修改)
+            DefaultProfile.addEndpoint("cn-hangzhou", "cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
+            //(不必修改)
+            IAcsClient acsClient = new DefaultAcsClient(profile);
+            //组装请求对象(不必修改)
+            SendSmsRequest request = new SendSmsRequest();
+            //****处填写接收方的手机号码
+            request.setPhoneNumbers(phone);
+            //****填写已申请的短信签名
+            request.setSignName("lq的宠物商店");
+            //****填写获得的短信模版CODE
+            request.setTemplateCode("SMS_187260805");
+            //笔者的短信模版中有${code}, 因此此处对应填写验证码
+            request.setTemplateParam("{\"code\":\""+verifyCode+"\"}");
+            //不必修改
+            SendSmsResponse sendSmsResponse = acsClient.getAcsResponse(request);
+
+            //将生成的验证码和创建时间放到session中，后面验证从session中取
+            HttpSession session = httpServletRequest.getSession();
+            session.setAttribute("verifyCode",verifyCode);
+            session.setAttribute("verifyCodeCreateTime",System.currentTimeMillis());
+//			return sendSmsResponse;
+            return "success";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+
     }
 }

@@ -12,19 +12,32 @@
     <div id="Catalog">
         <form action="/account/signon" method="post">
             <p>Please enter your username and password.</p>
-            <p>
-                用户名:    <input type="text" name="username"><br/>
-                密码:      <input type="password" name="password">.<br>
-                输入手机:  <input type="text" name="phone" id="phone"><br>
-                短信验证码:<input type="text" name="msgcode" id="msgcode" maxlength="6">
-                           <input type="button" value="获取验证码" id="validationCode" name="validationCode"><br>
-            </p>
+            <table Border="0" >
+                <tr>
+                    <td>用户名:</td>
+                    <td><input type="text" name="username"></td>
+                </tr>
+                <tr>
+                    <td>密码:</td>
+                    <td><input type="password" name="password">
+                    </td>
+                </tr>
+                <tr>
+                    <td>输入手机:</td>
+                    <td><input type="text" name="phone" id="phone">
+                    </td>
+                </tr>
+                <tr>
+                    <td>短信验证码:</td>
+                    <td><input type="text" name="msgcode" id="msgcode" maxlength="6">
+                    </td>
+                    <td><input type="button" value="获取验证码" id="validationCode" name="validationCode"></td>
+                </tr>
+            </table>
             <p th:if="${msg!=null}" th:text="${msg}"></p>
             <p th:if="${msg1!=null}" th:text="${msg1}"></p>
             <input type="submit" value="Login">
-
         </form>
-
         Need a user name and password?
         <a href="/account/newAccountForm">Register Now!</a>
     </div>

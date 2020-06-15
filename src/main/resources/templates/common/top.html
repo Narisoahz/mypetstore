@@ -35,6 +35,8 @@
                 <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/signoff">Sign Out</a>
                 <img th:if="(${session.account} != null) and (${session.authenticated})" align="middle" src="../images/separator.gif" />
                 <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/editAccountForm">My Account</a>
+                <img align="middle" src="../../images/separator.gif" />
+                <a href="/manage/signonForm">Manage System</a>
 <!--                <img align="middle" src="../images/separator.gif" />-->
 <!--                <a href="editAccount">My Account</a>-->
                 <img align="middle" src="../images/separator.gif" />

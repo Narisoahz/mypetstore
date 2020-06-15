@@ -22,7 +22,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/account")
-@SessionAttributes({"account", "myList", "authenticated"})
+@SessionAttributes({"account", "myList", "authenticated","accountList"})
 public class AccountController {
     @Autowired
     private AccountService accountService;
@@ -46,7 +46,7 @@ public class AccountController {
 
         CATEGORY_LIST = Collections.unmodifiableList(catList);
     }
-
+//打开登录界面
     @GetMapping("/signonForm")
 public String signonForm(){
     return "account/signon";
@@ -88,7 +88,6 @@ public String signonForm(){
 
         }
     }
-
     @GetMapping("/signoff")
     public String signoff(Model model) {
         Account loginAccount = new Account();
@@ -132,6 +131,7 @@ public String signonForm(){
             return "redirect:/account/signonForm";
         }
     }
+    //my account中打开信息界面
     @GetMapping("/editAccountForm")
     public String editAccountForm(@SessionAttribute("account") Account account , Model model){
         model.addAttribute("account", account);
@@ -139,6 +139,40 @@ public String signonForm(){
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
         return "account/edit_account";
     }
+    //管理系统中打开信息界面
+    @GetMapping("/manageAccount")
+    public String manageAccount(String username,Model model){
+        Account account=accountService.getAccount(username);
+        model.addAttribute("account", account);
+        model.addAttribute("LANGUAGE_LIST", LANGUAGE_LIST);
+        model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
+        return "manage/edit_account";
+    }
+    @GetMapping("/resetPassword")
+    public String resetPassword(String username,Model model){
+        Account account=accountService.getAccount(username);
+        String md5Pwd="";
+        MD5keyBean md5keyBean = new MD5keyBean();
+        md5Pwd=md5keyBean.getkeyBeanofStr("123");
+        account.setPassword(md5Pwd);
+        accountService.resetPassword(account);
+        boolean authenticated = false;
+        List<Account> accountList=accountService.getAllAcount();//更新信息
+        model.addAttribute("accountList", accountList);
+        model.addAttribute("authenticated", authenticated);
+        return "manage/allUser";
+    }
+    //管理系统中提交信息
+    @PostMapping("/editAccount_manage")
+    public String editAccount_manage(Account account,Model model){
+            accountService.updateAccountManage(account);
+        boolean authenticated = false;
+        List<Account> accountList=accountService.getAllAcount();//更新信息
+       model.addAttribute("accountList", accountList);
+        model.addAttribute("authenticated", authenticated);
+            return "/manage/allUser";
+        }
+    //my account中提交信息
     @PostMapping("/editAccount")
     public String editAccount(Account account,String repeatedPassword,Model model){
         String md5Pwd="";

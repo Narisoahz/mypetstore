@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
+<body>
+<div th:replace="common/top"></div>
+<div id="Content">
+    <div id="BackLink">
+        <a href="/manage/view">RETURN TO THE MENU</a>
+    </div>
+    <div id="User">
+        <h2>用户管理</h2>
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>详细信息</th>
+                <th>安全</th>
+            </tr>
+            <tr th:each="account:${accountList}">
+                <td th:text="${account.username}">username</td>
+                <td th:text="${account.phone}">phone</td>
+                <td th:text="${account.city}">city</td>
+                <td><a th:href="@{/account/manageAccount?username=}+${account.username}" th:text="修改"/></td>
+                <td><a th:href="@{/account/resetPassword?username=}+${account.username}" th:text="重置密码"/></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div th:replace="common/bottom"></div>
+</body>
+</html>

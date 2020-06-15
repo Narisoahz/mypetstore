@@ -98,11 +98,16 @@
             PASSWORD = #{password}
         WHERE USERNAME = #{username}
     </update>
-
     <insert id="insertSignon" parameterType="Account">
         INSERT INTO SIGNON
             (PASSWORD,USERNAME)
         VALUES (#{password}, #{username})
     </insert>
-
+    <select id="getAllAcount" resultType="Account">
+        SELECT
+            userId as username,
+            phone,
+            city
+        FROM ACCOUNT
+    </select>
 </mapper>

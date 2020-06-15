@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
+<body>
+<header th:replace="common/userTop"></header>
+<div id="Content">
+    <div id="Catalog">
+        <form action="/account/editAccount_manage" method="post" th:object="${account}">
+
+            <div th:replace="account/include_account_fields::fields">
+            </div>
+            <input type="submit" value="Save Account Information">
+        </form>
+    </div>
+</div>
+<footer th:replace="common/bottom"></footer>
+</body>
+</html>

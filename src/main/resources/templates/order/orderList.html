@@ -3,28 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="../css/jpetstore.css" type="text/css">
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
 </head>
 <body>
-<div th:replace="/common/top"/>
+<header th:replace="common/top"></header>
 <div id="Content">
-    <h2>My Orders</h2>
-    <table>
-        <tr>
-            <th>Order ID</th>
-            <th>Date</th>
-            <th>Total Price</th>
-        </tr>
-        <!--        //进行循环得出下表-->
-        <tr th:each="order:${orderList}">
-            <td><a th:href="@{/order/vieworder(orderId=${order.orderId})}" th:text="${order.orderId}">1000</a></td>
-            <td th:text="${order.orderDate}">2014/03/23 12:00:00</td>
-            <td th:text="${order.totalPrice}">$18.50</td>
-        </tr>
-    </table>
+    <div id="BackLink">
+        <a href="/catalog/index">Return to Main Menu</a>
+    </div>
 
+    <div id="Catalog">
+
+        <h2>Order Manager</h2>
+        <table>
+            <tr>
+                <th><b>Order ID</b></th>
+                <th><b>Order Date</b></th>
+                <th><b>shipAddress1</b></th>
+                <th><b>shipAddress2</b></th>
+                <th><b>shipCity</b></th>
+                <th><b>billAddress1</b></th>
+                <th><b>billAddress2</b></th>
+                <th><b>billCity</b></th>
+                <th><b>totalPrice</b></th>
+                <th><b>status</b></th>
+                <th><b></b></th>
+                <!--                    <th><b></b></th>-->
+            </tr>s
+            <tr th:if="${orderList.size() == 0}">
+                <td colspan="8"><b>Your orders is empty.</b></td>
+            </tr>
+
+            <tr th:each="order:${orderList}">
+                <td th:text="${order.getOrderId()}"></td>
+                <td th:text="${order.getOrderDate()}"></td>
+                <td th:text="${order.getShipAddress1()}"></td>
+                <td th:text="${order.getShipAddress2()}"></td>
+                <td th:text="${order.getShipCity()}"></td>
+                <td th:text="${order.getBillAddress1()}"></td>
+                <td th:text="${order.getBillAddress2()}"></td>
+                <td th:text="${order.getBillCity()}"></td>
+                <td th:text="${order.getTotalPrice()}"></td>
+                <td th:if="${order.getStatus()} eq '0'" th:text="未付款"></td>
+                <td th:if="${order.getStatus()} eq '1'" th:text="已付款"></td>
+                <td>
+                    <a class="Button" th:href="'/order/viewUpdateOrder?userName='+ ${myAccount?.getUsername()} + '&orderId=' + ${order.getOrderId()}">Update</a>
+                </td>
+                <!--                    <td>-->
+                <!--                        <a class="Button" th:href="'/order/deleteOrder' + '?orderId=' + ${order.getOrderId()} + '&userName='+ ${myAccount?.getUsername()}">Remove</a>-->
+                <!--                    </td>-->
+                <td>
+                    <!--                            <form th:action="'/alipay/pay?orderId='${order.getOrderId()}" method="post">-->
+                    <!--                                <button type="submit">pay</button>-->
+                    <!--                            </form>-->
+                    <form action="#" th:action="@{/alipay/pay(orderId=${order.getOrderId()})}" method="post">
+                        <button type="submit">pay</button>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
-
-<div th:replace="/common/bottom"/>
+<footer th:replace="common/bottom"></footer>
 </body>
 </html>

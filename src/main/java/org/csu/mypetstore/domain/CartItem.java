@@ -6,10 +6,21 @@ import java.math.BigDecimal;
 public class CartItem implements Serializable {
     private static final long serialVersionUID = 6620528781626504362L;
 
+    private String itemId;
     private Item item;
     private int quantity;
     private boolean inStock;
     private BigDecimal total;
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+
 
     public boolean isInStock() {
         return inStock;
@@ -53,5 +64,4 @@ public class CartItem implements Serializable {
             total = null;
         }
     }
-
 }

@@ -1,57 +1,36 @@
 package org.csu.mypetstore.service;
 
 import org.csu.mypetstore.domain.Order;
-import org.csu.mypetstore.persistence.OrderDao;
+import org.csu.mypetstore.persistence.OrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
-
 @Service
-public class OrderService  {
-
-
+public class OrderService {
     @Autowired
-    OrderDao orderDao;
+    private OrderMapper orderMapper;
 
-    public List<Order> getOrdersByUsername(String username) {
-        return orderDao.getOrdersByUsername(username);
+    public List<Order> getOrderListByUsername(String username){
+        return orderMapper.getOrderListByUsername(username);
     }
 
-    public Order getOrdersByOrderId(String orderId) {
-        return orderDao.getOrdersByOrderId(orderId);
+    public Order getOrder(int orderId) {
+        return orderMapper.getOrder(orderId);
     }
 
-    public Order getOrder(int orderId){
-        return orderDao.getOrder(orderId);
+    public void insertOrder(Order order){
+        orderMapper.insertOrder(order);
     }
 
-    public int insertOrder(Order order){
-        return orderDao.insertOrder(order);
+    public void insertOrderStatus(Order order){
+        orderMapper.insertOrderStatus(order);
     }
 
-    public int updateOrder(Order order){
-        return orderDao.updateOrder(order);
-    }
+    public List<Order> getOrderList(){ return orderMapper.getOrderList(); }
 
-    public int deleteOrder(int orderId){
-        return orderDao.deleteOrder(orderId);
-    }
-
-    public int insertOrderState(int orderid, int lineNum, Date timeStamp, int status){
-        return orderDao.insertOrderState(orderid,lineNum,timeStamp,status);
-    }
-
-    public int updateOrderState(int state,int orderId){
-        return orderDao.updateOrderState(state,orderId);
-    }
-
-    public List<Order> getAllOrders() {
-        return orderDao.getAllOrders();
-    }
-
-    public List<Order> getOrdersByKeyword(String keyword){
-        return orderDao.getOrderByKeyword(keyword);
+    public void editOrder(Order order){
+        orderMapper.editOrder(order);
     }
 }

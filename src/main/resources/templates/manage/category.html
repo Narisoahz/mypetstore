@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
+<body>
+<div th:replace="common/top"></div>
+    <div id="BackLink">
+        <a href="/manage/managestore">RETURN TO THE MENU</a>
+    </div>
+</br>
+    <div align="center">
+        <div>
+            <form action="/manage/searchCategory"  method="post" style="position: relative">
+                <input type="text" name="keyword" size="14" />
+                <input type="submit" name="searchCategory" value="Search" />
+                <div id="context1" style="position: relative;background-color:white; border: 1px solid red;display:none" >
+                </div>
+            </form>
+            <p th:text="${msg}">Error Message</p>
+        </div>
+    </div>
+
+</body>
+</html>

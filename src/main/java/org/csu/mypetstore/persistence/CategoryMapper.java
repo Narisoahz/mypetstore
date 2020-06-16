@@ -8,6 +8,6 @@ import java.util.List;
 @Repository
 public interface CategoryMapper {
     List<Category> getCategoryList();
-
+    List<Category> searchCategoryList(String keywords);
     Category getCategory(String categoryId);
 }

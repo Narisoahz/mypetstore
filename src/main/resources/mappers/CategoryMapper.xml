@@ -21,4 +21,12 @@
         DESCN AS description
         FROM CATEGORY
     </select>
+    <select id="searchCategoryList" parameterType="string" resultType="Category">
+        SELECT
+            CATID AS categoryId,
+            NAME,
+            DESCN as description
+        FROM CATEGORY
+        WHERE lower(name) like #{value}
+    </select>
 </mapper>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
+<body>
+<div th:replace="common/top"></div>
+<div id="Content">
+    <div id="BackLink">
+        <a href="/manage/product">RETURN TO THE MENU</a>
+    </div>
+    <div id="User">
+        <h2>Product管理</h2>
+        <table>
+            <tr>
+                <th>ProductId</th>
+                <th>CategoryId</th>
+                <th>管理</th>
+                <th></th>
+            </tr>
+            <tr th:each="product:${productList}">
+                <td th:text="${product.productId}">productId</td>
+                <td th:text="${product.categoryId}">categoryId</td>
+                <td><a th:href="@{/manage/editProductForm?productId=}+${product.productId}" th:text="修改"/></td>
+                <td><a th:href="@{/manage/deleteProduct?productId=}+${product.productId}" th:text="删除"/></td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div th:replace="common/bottom"></div>
+</body>
+</html>

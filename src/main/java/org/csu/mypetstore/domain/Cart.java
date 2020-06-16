@@ -4,45 +4,20 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-@Component
+@Component("cart")
 public class Cart implements Serializable {
 
     private static final long serialVersionUID = 8329559983943337176L;
-    private  Map<String, CartItem> itemMap = Collections.synchronizedMap(new HashMap<String, CartItem>());
-    private  List<CartItem> itemList = new ArrayList<CartItem>();
-
-    public void setItemMap(Map<String, CartItem> itemMap) {
-        this.itemMap = itemMap;
-    }
-
-    public void setItemList(List<CartItem> itemList) {
-        this.itemList = itemList;
-    }
-
-    public Cart(List<CartItem> itemList) {
-        this.itemList = itemList;
-    }
+    private final Map<String, CartItem> itemMap = Collections.synchronizedMap(new HashMap<String, CartItem>());
+    private final List<CartItem> itemList = new ArrayList<CartItem>();
 
     public Iterator<CartItem> getCartItems() {
         return itemList.iterator();
     }
 
     public List<CartItem> getCartItemList() {
-        return itemList;
-    }
-
-    public Map<String, CartItem> getItemMap() {
-        return itemMap;
-    }
-
-    public List<CartItem> getItemList() {
         return itemList;
     }
 
@@ -69,13 +44,6 @@ public class Cart implements Serializable {
             itemList.add(cartItem);
         }
         cartItem.incrementQuantity();
-    }
-    public void addItem(CartItem item, boolean isInStock) {
-        if (item == null) {
-            itemMap.put(item.getItem().getItemId(), item);
-            itemList.add(item);
-        }
-        item.incrementQuantity();
     }
 
     public Item removeItemById(String itemId) {
@@ -110,5 +78,13 @@ public class Cart implements Serializable {
         }
         return subTotal;
     }
+    public void clean()
+    {
+        this.itemList.clear();
+        this.itemMap.clear();
+    }
 
+    public Map<String, CartItem> getItemMap() {
+        return itemMap;
+    }
 }

@@ -1,29 +1,50 @@
 package org.csu.mypetstore.controller;
 
 import org.csu.mypetstore.domain.Account;
+import org.csu.mypetstore.domain.Category;
 import org.csu.mypetstore.domain.Manager;
 import org.csu.mypetstore.domain.Product;
 import org.csu.mypetstore.service.AccountService;
+import org.csu.mypetstore.service.CatalogService;
 import org.csu.mypetstore.service.ManagerService;
 import org.csu.mypetstore.tool.MD5keyBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
 @RequestMapping("/manage")
-@SessionAttributes({"accountList"})
+@SessionAttributes({"accountList","product"})
 public class ManageController {
     @Autowired
     private ManagerService managerService;
     @Autowired
+    private CatalogService catalogService;
+    @Autowired
     private AccountService accountService;
+    private static final List<String> CATEGORY_LIST;
+    static {
+        List<String> catList = new ArrayList<String>();
+        catList.add("FISH");
+        catList.add("DOGS");
+        catList.add("REPTILES");
+        catList.add("CATS");
+        catList.add("BIRDS");
+        CATEGORY_LIST = Collections.unmodifiableList(catList);
+    }
     @GetMapping("/signonForm")
     public String signonForm(){
         return "manage/signon";
@@ -53,5 +74,121 @@ public class ManageController {
         List<Account> accountList=accountService.getAllAcount();
         model.addAttribute("accountList", accountList);
         return "manage/allUser";
+    }
+    @GetMapping("/managestore")
+    public String managestore(){
+        return "manage/managestore";
+    }
+    @GetMapping("/category")
+    public String manageCategory(){
+        return "manage/category";
+    }
+    @GetMapping("/product")
+    public String manageProduct(){
+        return "manage/product";
+    }
+    @PostMapping("/searchCategory")
+    public String searchCategory(String keyword,Model model)
+    {
+        if(keyword == null || keyword.length() < 1){
+            String msg = "Please enter a keyword to search for, then press the search button.";
+            model.addAttribute("msg",msg);
+            return "manage/category";
+        }else {
+            List<Category> categoryList = catalogService.searchCategoryList(keyword.toLowerCase());
+            processCategoryDescription(categoryList);
+            model.addAttribute("categoryList",categoryList);
+            return "manage/searchCategory";
+        }
+    }
+    @PostMapping("/searchProducts")
+    public String searchProducts(String keyword,Model model){
+        if(keyword == null || keyword.length() < 1){
+            String msg = "Please enter a keyword to search for, then press the search button.";
+            model.addAttribute("msg",msg);
+            return "common/error";
+        }else {
+            List<Product> productList = catalogService.searchProductList(keyword.toLowerCase());
+            processProductDescription(productList);
+            model.addAttribute("productList",productList);
+            return "manage/search_products";
+        }
+    }
+    /*
+            解决Thymeleaf将数据库中的Product的描述(description属性)中的<image>标签解析成普通文本的问题。
+            本方法在Product中添加了imageURL属性，相当于将product的描述信息分成两部分处理了。
+            同样，界面上也是用了两个标签了，一个img标签和一个lable标签。
+            此方法是快速解决上述问题的临时方案，更好的方法应是更改数据库结构，将图片信息和普通文字描述信息分为两个字段存储。
+         */
+    private void processProductDescription(Product product){
+        String [] temp = product.getDescription().split("\"");
+        product.setDescriptionImage(temp[1]);
+        product.setDescriptionText(temp[2].substring(1));
+    }
+    private void processProductDescription(List<Product> productList){
+        for(Product product : productList) {
+            processProductDescription(product);
+        }
+    }
+    private void processCategoryDescription(Category category){
+        String [] temp = category.getDescription().split("\"");
+        category.setDescriptionImage(temp[1]);
+        category.setDescriptionText(temp[2].substring(1));
+    }
+    private void processCategoryDescription(List<Category> categoryList){
+        for(Category category :categoryList) {
+            processCategoryDescription(category);
+        }
+    }
+    @GetMapping("newProductForm")
+    private String newProductForm(Model model){
+        model.addAttribute("newProduct",new Product());
+        model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
+        return "/manage/new_product";
+    }
+    @PostMapping("/newProduct")
+    public String newProduct(Product product,Model model) {
+        if (product.getProductId().length()== 0 || product.getName().length()== 0 || product.getDescription() .length()== 0) {
+            String msg = "信息不能为空";
+            model.addAttribute("msg", msg);
+            return "manage/new_product";
+        } else {
+            catalogService.insertProduct(product);
+            boolean authenticated = false;
+            model.addAttribute("authenticated", authenticated);
+            return "/manage/product";
+        }
+    }
+    @GetMapping("/allProduct")
+    public String allProduct(Model model){
+        List<Product> productList=catalogService.getAllProduct();
+        model.addAttribute("productList", productList);
+        return "manage/allProduct";
+    }
+    @GetMapping("/editProductForm")
+    public String editProductForm(String productId,Model model){
+        Product product=catalogService.getProduct(productId);
+        model.addAttribute("product",product);
+        model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
+        return "manage/edit_product";
+    }
+    @PostMapping("/editProduct_manage")
+    public String editProduct_manage(Product product,Model model){
+        System.out.println(product.getProductId());
+        catalogService.updateProduct(product);
+        boolean authenticated = false;
+        List<Product> productList=catalogService.getAllProduct();//更新信息
+        model.addAttribute("productList", productList);
+        model.addAttribute("authenticated", authenticated);
+        return "/manage/allProduct";
+    }
+    @GetMapping("/deleteProduct")
+    public String deleteProduct(String productId,Model model){
+        catalogService.deleteProduct(productId);
+        boolean authenticated = false;
+        List<Product> productList=catalogService.getAllProduct();//更新信息
+        model.addAttribute("productList", productList);
+        model.addAttribute("authenticated", authenticated);
+        return "/manage/allProduct";
     }
 }

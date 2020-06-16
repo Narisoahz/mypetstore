@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+</head>
+<body>
+<div th:replace="common/top"></div>
+<div id="store">
+    <div id="BackLink">
+        <a href="/manage/managestore">RETURN TO THE MENU</a>
+    </div>
+    <div id="Main">
+        <div id="Sidebar">
+            <div>
+                <p>查询Product</p>
+                <form action="/manage/searchProducts"  method="post" style="position: relative">
+                    <input type="text" name="keyword" size="14" />
+                    <input type="submit" name="searchCategory" value="Search" />
+                    <div id="context1" style="position: relative;background-color:white; border: 1px solid red;display:none" >
+                    </div>
+                </form>
+                <p th:text="${msg}">Error Message</p>
+            </div>
+            <div id="SidebarContent">
+                <a href="/manage/newProductForm">新增Product</a>
+                <br/>
+                <a href="/manage/allProduct">修改/删除Product</a>
+                <br/>
+            </div>
+        </div>
+
+        <div id="MainImage">
+            <div id="MainImageContent">
+                <img height="450" src="../images/petstore.jpg" align="middle" width="608" />
+            </div>
+        </div>
+        <div id="Separator">&nbsp;</div>
+    </div>
+</div>
+<div th:replace="common/bottom"></div>
+
+</body>
+</html>

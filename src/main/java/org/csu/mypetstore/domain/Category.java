@@ -10,6 +10,25 @@ public class Category implements Serializable {
     private String name;
     private String description;
 
+    public String getDescriptionImage() {
+        return descriptionImage;
+    }
+
+    public void setDescriptionImage(String descriptionImage) {
+        this.descriptionImage = descriptionImage;
+    }
+
+    public String getDescriptionText() {
+        return descriptionText;
+    }
+
+    public void setDescriptionText(String descriptionText) {
+        this.descriptionText = descriptionText;
+    }
+
+    private String descriptionImage;//图片
+    private String descriptionText;//文字
+
     public String getCategoryId() {
         return categoryId;
     }

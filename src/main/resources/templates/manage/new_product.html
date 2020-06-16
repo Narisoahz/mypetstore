@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
+<body>
+<header th:replace="common/top"></header>
+<div id="Content">
+    <div id="Catalog">
+        <form action="/manage/newProduct" method="post" th:object="${newProduct}">
+            <h3>Product Information</h3>
+            <table>
+                <tr>
+                    <td>Product ID:</td>
+                    <td><input type="text" th:field="*{productId}"></td>
+                </tr>
+                <tr>
+                    <td>Category:</td>
+                    <td>
+                        <select th:field="*{categoryId}">
+                            <option th:each="categoryId:${CATEGORY_LIST}" th:value="${categoryId}" th:text="${categoryId}">
+
+                            </option>
+                        </select>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td><input type="text" th:field="*{name}"></td>
+                </tr>
+                <tr>
+                    <td>descn:</td>
+                    <td><input type="text" th:field="*{description}"></td>
+                </tr>
+                <tr>
+                    <td th:text="${msg}"></td>
+                </tr>
+            </table>
+            <input type="submit" value="Save Product Information">
+        </form>
+    </div>
+</div>
+<footer th:replace="common/bottom"></footer>
+</body>
+</html>

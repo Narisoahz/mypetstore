@@ -34,5 +34,26 @@
         FROM PRODUCT
         WHERE lower(name) like #{value}
     </select>
-
+<insert id="insertProduct" parameterType="Product">
+    INSERT INTO PRODUCT
+            (PRODUCTID,CATEGORY,NAME,DESCN)
+        VALUES(
+            #{productId},#{categoryId},#{name},#{description})
+</insert>
+    <select id="getAllProduct" resultType="Product">
+        SELECT
+            productId,
+            category as categoryId
+        FROM PRODUCT
+    </select>
+    <update id="updateProduct" parameterType="Product">
+        UPDATE PRODUCT SET
+            CATEGORY=#{categoryId},
+            NAME=#{name},
+            descn=#{description}
+        WHERE PRODUCTID=#{productId}
+    </update>
+    <delete id="deleteProduct" parameterType="string">
+        delete from PRODUCT WHERE PRODUCTID=#{value}
+    </delete>
 </mapper>

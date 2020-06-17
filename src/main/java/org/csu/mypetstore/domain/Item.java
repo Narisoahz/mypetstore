@@ -20,6 +20,15 @@ public class Item implements Serializable {
     private String attribute5;
     private Product product;
     private int quantity;
+    private boolean onSale;
+    public boolean isOnSale() {
+        return onSale;
+    }
+
+    public void setOnSale(boolean onSale) {
+        this.onSale = onSale;
+    }
+
 
     public String getItemId() {
         return itemId;

@@ -1,5 +1,11 @@
 package org.csu.mypetstore.controller;
 
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsRequest;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.profile.DefaultProfile;
+import com.aliyuncs.profile.IClientProfile;
 import org.csu.mypetstore.domain.*;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
@@ -9,13 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/manage")
-@SessionAttributes({"accountList","product"})
+@SessionAttributes({"accountList","product","item"})
 public class ManageController {
     @Autowired
     private ManagerService managerService;
@@ -162,6 +172,21 @@ public class ManageController {
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
         return "/manage/new_product";
     }
+    @PostMapping("/newitem")
+    public String newItem(Item item,Model model){
+        if (item.getItemId().length()==0) {
+            String msg = "信息不能为空";
+            model.addAttribute("msg", msg);
+            return "manage/new_item";
+        } else {
+            catalogService.insertItem(item);
+            boolean authenticated = false;
+            model.addAttribute("authenticated", authenticated);
+            String msg1 = "新建成功!";
+            model.addAttribute("msg1", msg1);
+            return "/manage/item";
+        }
+    }
     @PostMapping("/newProduct")
     public String newProduct(Product product,Model model) {
         if (product.getProductId().length()== 0 || product.getName().length()== 0 || product.getDescription() .length()== 0) {
@@ -171,15 +196,23 @@ public class ManageController {
         } else {
             catalogService.insertProduct(product);
             boolean authenticated = false;
+            String msg1 = "新建成功!";
+            model.addAttribute("msg1", msg1);
             model.addAttribute("authenticated", authenticated);
             return "/manage/product";
         }
+    }
+    @GetMapping("/allItem")
+    public String allItem(Model model){
+        List<Item> itemList=catalogService.getAllItem();
+        model.addAttribute("itemList", itemList);
+        return "/manage/allItem";
     }
     @GetMapping("/allProduct")
     public String allProduct(Model model){
         List<Product> productList=catalogService.getAllProduct();
         model.addAttribute("productList", productList);
-        return "manage/allProduct";
+        return "/manage/allProduct";
     }
     @GetMapping("/editProductForm")
     public String editProductForm(String productId,Model model){
@@ -187,6 +220,24 @@ public class ManageController {
         model.addAttribute("product",product);
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);
         return "manage/edit_product";
+    }
+    @GetMapping("/editItemForm")
+    public String editItemtForm(String itemId,Model model){
+        Item item=catalogService.getItem1(itemId);
+        PRODUCTID_LIST=catalogService.getAllProductId();
+        model.addAttribute("PRODUCTID_LIST", PRODUCTID_LIST);
+        model.addAttribute("item",item);
+        return "manage/edit_item";
+    }
+    @PostMapping("editItem_manage")
+    public String editItem_manage(Item item,Model model){
+
+        catalogService.updateItem(item);
+        boolean authenticated = false;
+        List<Item> itemList=catalogService.getAllItem();//更新信息
+        model.addAttribute("itemList", itemList);
+        model.addAttribute("authenticated", authenticated);
+        return "/manage/allItem";
     }
     @PostMapping("/editProduct_manage")
     public String editProduct_manage(Product product,Model model){
@@ -199,12 +250,39 @@ public class ManageController {
         return "/manage/allProduct";
     }
     @GetMapping("/deleteProduct")
-    public String deleteProduct(String productId,Model model){
+    public String deleteProduct(String productId,Model model) {
         catalogService.deleteProduct(productId);
         boolean authenticated = false;
-        List<Product> productList=catalogService.getAllProduct();//更新信息
+        List<Product> productList = catalogService.getAllProduct();//更新信息
         model.addAttribute("productList", productList);
         model.addAttribute("authenticated", authenticated);
         return "/manage/allProduct";
+    }
+    //修改库存数
+    @RequestMapping(value = "/editQty")
+    @ResponseBody
+    public void editQty(@RequestParam("quantity") int quantity, @RequestParam("itemId") String itemId){
+//        System.out.println(itemId);
+//        System.out.println(quantity);
+        catalogService.updateQtyManage(itemId,quantity);
+
+        }
+        @GetMapping("/outSaleItem")
+        public String outSaleItem(String itemId,Model model) {
+            catalogService.outSaleItem(itemId);
+            boolean authenticated = false;
+            List<Item> itemList = catalogService.getAllItem();//更新信息
+            model.addAttribute("itemList", itemList);
+            model.addAttribute("authenticated", authenticated);
+            return "/manage/allItem";
+        }
+    @GetMapping("/onSaleItem")
+    public String onSaleItem(String itemId,Model model) {
+        catalogService.onSaleItem(itemId);
+        boolean authenticated = false;
+        List<Item> itemList = catalogService.getAllItem();//更新信息
+        model.addAttribute("itemList", itemList);
+        model.addAttribute("authenticated", authenticated);
+        return "/manage/allItem";
     }
 }

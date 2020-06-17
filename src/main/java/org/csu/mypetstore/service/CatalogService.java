@@ -53,11 +53,20 @@ public class CatalogService {
     public List<Item> getItemListByProduct(String productId){
         return itemMapper.getItemListByProduct(productId);
     }
-
+    public void insertItem(Item item){
+        item.setStatus("P");
+        item.setSupplierId(1);
+        item.setOnSale(true);
+        itemMapper.insertItem(item);
+        itemMapper.insertInventory(item);
+    }
     public Item getItem(String itemId){
         return itemMapper.getItem(itemId);
     }
-
+    public Item getItem1(String itemId){
+        return itemMapper.getItem1(itemId);
+    }
+    public List<Item> getAllItem(){ return itemMapper.getAllItem();}
     public boolean isItemInStock(String itemId){
         return itemMapper.getInventoryQuantity(itemId) > 0;
     }
@@ -65,8 +74,14 @@ public class CatalogService {
     public void updateInventoryQuantity(Map<String, Object> param){
         itemMapper.updateInventoryQuantity(param);
     }
+    public void updateItem(Item item){ itemMapper.updateItem(item);}
     public List<Product> getAllProduct(){
         return productMapper.getAllProduct();
     }
     public void deleteProduct(String productId){productMapper.deleteProduct(productId);}
+    public void outSaleItem(String itemId){ itemMapper.outSaleItem(itemId);}
+    public void onSaleItem(String itemId){ itemMapper.onSaleItem(itemId);}
+    public void updateQtyManage(String itemId,int quantity){
+        itemMapper.updateQty(itemId,quantity);
+    }
 }

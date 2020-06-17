@@ -202,7 +202,7 @@ public String signonForm(){
     @RequestMapping(value = "/sendSms")
     @ResponseBody
     public Object sendSMS(@RequestParam("phone") String phone, HttpServletRequest httpServletRequest){
-//        System.out.println(phone);
+       // System.out.println(phone);
         try {
             //生成6位验证码
             String verifyCode = String.valueOf(new Random().nextInt(899999) + 100000);

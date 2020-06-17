@@ -6,15 +6,15 @@
     <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
 </head>
 <body>
-<header th:replace="common/top"></header>
+<header th:replace="common/itemTop"></header>
 <div id="Content">
     <div id="Catalog">
-        <form action="/manage/newitem" method="post" th:object="${newItem}">
-            <h3>Item Information</h3>
+        <form action="/manage/editItem_manage" method="post" th:object="${item}">
+            <h3>Product Information</h3>
             <table>
                 <tr>
-                    <td>Item ID:</td>
-                    <td><input type="text" th:field="*{itemId}"></td>
+                    <td>item ID:</td>
+                    <td th:text="*{itemId}"></td>
                 </tr>
                 <tr>
                     <td>ProductId:</td>
@@ -26,27 +26,22 @@
                         </select>
                 </tr>
                 <tr>
-                    <td>ListPrice:</td>
+                    <td>listPrice:</td>
                     <td><input type="text" th:field="*{listPrice}"></td>
                 </tr>
                 <tr>
-                    <td>UnitCost:</td>
-                    <td><input type="text" th:field="*{unitCost}"></td>
-                </tr>
+                <td>unitCost:</td>
+                <td><input type="text" th:field="*{unitCost}"></td>
+            </tr>
                 <tr>
                     <td>attribute:</td>
                     <td><input type="text" th:field="*{attribute1}"></td>
-                </tr>
-                <tr>
-                    <td>quantity:</td>
-                    <td><input type="text" th:field="*{quantity}"></td>
                 </tr>
                 <tr>
                     <td th:text="${msg}"></td>
                 </tr>
             </table>
             <input type="submit" value="Save Item Information">
-            <a href="/manage/item">cancel</a>
         </form>
     </div>
 </div>

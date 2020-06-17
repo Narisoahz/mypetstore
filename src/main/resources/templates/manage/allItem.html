@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<div th:replace="common/top"></div>
+<div id="Content">
+    <div id="BackLink">
+        <a href="/manage/item">RETURN TO THE MENU</a>
+    </div>
+    <div id="User">
+        <h2>item管理</h2>
+        <table>
+            <tr>
+                <th>itemId</th>
+                <th>productId</th>
+                <th>listPrice</th>
+                <th>quantity</th>
+                <th>管理</th>
+                <th>上/下架</th>
+            </tr>
+            <tr th:each="item:${itemList}">
+                <td th:text="${item.itemId}" name="itemId" id="itemId">itemId
+                </td>
+                <td th:text="${item.productId}">productId</td>
+                <td th:text="${item.listPrice}">listPrice</td>
+                <td><input type="text" th:name="${item.itemId}" th:value="${item.quantity}" th:id="@{quantityOf}+${item.itemId}" onchange="update(this.name);"/>
+                <td><a th:href="@{/manage/editItemForm?itemId=}+${item.itemId}" th:text="修改"/></td>
+                <td><a th:if="${item.onSale}" th:href="@{/manage/outSaleItem?itemId=}+${item.itemId}" th:text="下架"/>
+                    <a th:if="${!item.onSale}" th:href="@{/manage/onSaleItem?itemId=}+${item.itemId}" th:text="上架"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div th:replace="common/bottom"></div>
+<script type="text/javascript">
+    var quantity;
+    var itemId1;
+    function update(itemId){
+     itemId1=itemId;
+     quantity=document.getElementById("quantityOf"+itemId).value;
+        $.ajax({
+            cache : false,
+            url : "/manage/editQty",
+            data : {quantity:quantity,
+            itemId:itemId},
+            // success:location.reload()
+        });
+    };
+
+</script>
+</body>
+</html>

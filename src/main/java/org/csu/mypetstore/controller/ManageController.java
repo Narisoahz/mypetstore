@@ -1,9 +1,6 @@
 package org.csu.mypetstore.controller;
 
-import org.csu.mypetstore.domain.Account;
-import org.csu.mypetstore.domain.Category;
-import org.csu.mypetstore.domain.Manager;
-import org.csu.mypetstore.domain.Product;
+import org.csu.mypetstore.domain.*;
 import org.csu.mypetstore.service.AccountService;
 import org.csu.mypetstore.service.CatalogService;
 import org.csu.mypetstore.service.ManagerService;
@@ -12,15 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +24,7 @@ public class ManageController {
     @Autowired
     private AccountService accountService;
     private static final List<String> CATEGORY_LIST;
+    private List<String> PRODUCTID_LIST;
     static {
         List<String> catList = new ArrayList<String>();
         catList.add("FISH");
@@ -87,6 +76,8 @@ public class ManageController {
     public String manageProduct(){
         return "manage/product";
     }
+    @GetMapping("/item")
+    public String manageItem(){ return "manage/item";}
     @PostMapping("/searchCategory")
     public String searchCategory(String keyword,Model model)
     {
@@ -99,6 +90,19 @@ public class ManageController {
             processCategoryDescription(categoryList);
             model.addAttribute("categoryList",categoryList);
             return "manage/searchCategory";
+        }
+    }
+    @PostMapping("/searchItem")
+    public String searchItem(String keyword,Model model){
+        if(keyword == null || keyword.length() < 1){
+            String msg = "Please enter a keyword to search for, then press the search button.";
+            model.addAttribute("msg",msg);
+            return "common/error";
+        }else {
+            List<Item> itemList = catalogService.searchItemList(keyword.toLowerCase());
+            processItemProductDescription(itemList);
+            model.addAttribute("itemList",itemList);
+            return "manage/search_item";
         }
     }
     @PostMapping("/searchProducts")
@@ -130,6 +134,11 @@ public class ManageController {
             processProductDescription(product);
         }
     }
+    private void processItemProductDescription(List<Item> itemList){
+        for(Item item:itemList){
+            processProductDescription(item.getProduct());
+        }
+    }
     private void processCategoryDescription(Category category){
         String [] temp = category.getDescription().split("\"");
         category.setDescriptionImage(temp[1]);
@@ -140,7 +149,14 @@ public class ManageController {
             processCategoryDescription(category);
         }
     }
-    @GetMapping("newProductForm")
+    @GetMapping("/newItemForm")
+    private  String newItemForm(Model model){
+        PRODUCTID_LIST=catalogService.getAllProductId();
+        model.addAttribute("newItem",new Item());
+        model.addAttribute("PRODUCTID_LIST", PRODUCTID_LIST);
+            return "/manage/new_item";
+    }
+    @GetMapping("/newProductForm")
     private String newProductForm(Model model){
         model.addAttribute("newProduct",new Product());
         model.addAttribute("CATEGORY_LIST", CATEGORY_LIST);

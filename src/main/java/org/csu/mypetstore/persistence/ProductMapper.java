@@ -16,4 +16,5 @@ public interface ProductMapper {
    void insertProduct(Product product);
     List<Product> getAllProduct();
     void deleteProduct(String productId);
+    List<String> getAllProductId();
 }

@@ -34,7 +34,7 @@ public class CatalogService {
     public Product getProduct(String productId) {
         return productMapper.getProduct(productId);
     }
-
+    public List<String> getAllProductId(){return productMapper.getAllProductId();}
     public List<Product> getProductListByCategory(String categoryId) {
         return productMapper.getProductListByCategory(categoryId);
     }
@@ -43,6 +43,9 @@ public class CatalogService {
     }
     public List<Product> searchProductList(String keyword) {
         return productMapper.searchProductList("%" + keyword.toLowerCase() + "%");
+    }
+    public List<Item> searchItemList(String keyword){
+        return itemMapper.searchItemList("%" + keyword.toLowerCase() + "%");
     }
     public void insertProduct(Product product){
         productMapper.insertProduct(product);

@@ -14,7 +14,11 @@
         FROM PRODUCT
         WHERE PRODUCTID = #{productId}
     </select>
-
+<select id="getAllProductId" resultType="String">
+    SELECT
+    PRODUCTID
+    FROM PRODUCT
+</select>
     <select id="getProductListByCategory" parameterType="string" resultType="Product">
         SELECT
             PRODUCTID,

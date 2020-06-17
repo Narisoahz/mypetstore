@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+</head>
+<body>
+<header th:replace="common/top"></header>
+<div id="Content">
+    <div id="BackLink">
+        <a href="/manage/item">Return to Main Menu</a>
+    </div>
+
+    <div id="Catalog">
+
+        <table>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Item ID</th>
+                <th>Product ID</th>
+                <th>Listprice</th>
+                <th>unitcost</th>
+                <th>attribute</th>
+                <th>quantity</th>
+            </tr>
+
+            <tr th:each="item:${itemList}">
+                <td>
+                    <label><img th:src="${item.product.descriptionImage}"></label>
+                    <label th:text="${item.product.descriptionText}"></label>
+                </td>
+                <td>
+                    <b>
+                        <a th:href="'/catalog/viewItem?itemId='+${item.itemId}" >
+                            <font color="BLACK" th:text="${item.itemId}">item.itemId</font>
+                        </a>
+                    </b>
+                </td>
+                <td th:text="${item.product.productId}">
+                    productId
+                </td>
+                <td th:text="${item.listPrice}">
+                    listPrice
+                </td>
+                <td th:text="${item.unitCost}">
+                    unitCost
+                </td>
+                <td th:text="${item.attribute1}">
+                    <b><font size="4" th:text="${item.attribute1}"> attribute</font></b>
+                </td>
+                <td th:text="${item.quantity}">
+                    quantity
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+<footer th:replace="common/bottom"></footer>
+</body>
+</html>

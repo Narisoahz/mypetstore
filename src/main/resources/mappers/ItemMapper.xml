@@ -48,7 +48,28 @@
         AND I.ITEMID = V.ITEMID
         AND I.ITEMID = #{value}
     </select>
-
+<select id="searchItemList" parameterType="string" resultType="Item">
+ SELECT
+            I.ITEMID,
+            I.LISTPRICE,
+            I.UNITCOST,
+            I.SUPPLIER AS supplierId,
+            I.PRODUCTID AS "product.productId",
+            P.NAME AS "product.name",
+            P.DESCN AS "product.description",
+            P.CATEGORY AS "product.categoryId",
+            I.STATUS,
+            ATTR1 AS attribute1,
+            ATTR2 AS attribute2,
+            ATTR3 AS attribute3,
+            ATTR4 AS attribute4,
+            ATTR5 AS attribute5,
+            QTY AS quantity
+        FROM ITEM I, INVENTORY V, PRODUCT P
+        WHERE P.PRODUCTID = I.PRODUCTID
+        AND I.ITEMID = V.ITEMID
+        AND lower(i.itemid) like #{value}
+</select>
     <select id="getInventoryQuantity" parameterType="string" resultType="int">
         SELECT QTY AS value
         FROM INVENTORY

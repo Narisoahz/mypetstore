@@ -9,29 +9,33 @@
 <header th:replace="common/top"></header>
 <div id="Content">
     <div id="Catalog">
-        <form action="/manage/newProduct" method="post" th:object="${newProduct}">
-            <h3>Product Information</h3>
+        <form action="/manage/newitem" method="post" th:object="${newItem}">
+            <h3>Item Information</h3>
             <table>
                 <tr>
-                    <td>Product ID:</td>
-                    <td><input type="text" th:field="*{productId}"></td>
+                    <td>Item ID:</td>
+                    <td><input type="text" th:field="*{itemId}"></td>
                 </tr>
                 <tr>
-                    <td>Category:</td>
+                    <td>ProductId:</td>
                     <td>
-                        <select th:field="*{categoryId}">
-                            <option th:each="categoryId:${CATEGORY_LIST}" th:value="${categoryId}" th:text="${categoryId}">
+                        <select th:field="*{productId}">
+                            <option th:each="productId:${PRODUCTID_LIST}" th:value="${productId}" th:text="${productId}">
 
                             </option>
                         </select>
                 </tr>
                 <tr>
-                    <td>Name:</td>
-                    <td><input type="text" th:field="*{name}"></td>
+                    <td>ListPrice:</td>
+                    <td><input type="text" th:field="*{listPrice}"></td>
                 </tr>
                 <tr>
-                    <td>descn:</td>
-                    <td><input type="text" th:field="*{description}"></td>
+                    <td>UnitCost:</td>
+                    <td><input type="text" th:field="*{unitCost}"></td>
+                </tr>
+                <tr>
+                    <td>UnitCost:</td>
+                    <td><input type="text" th:field="*{unitCost}"></td>
                 </tr>
                 <tr>
                     <td th:text="${msg}"></td>

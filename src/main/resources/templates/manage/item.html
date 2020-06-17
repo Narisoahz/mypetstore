@@ -5,22 +5,29 @@
     <title>Title</title>
     <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
     <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
-
 </head>
 <body>
 <div th:replace="common/top"></div>
 <div id="store">
     <div id="BackLink">
-        <a href="/manage/view">RETURN TO THE MENU</a>
+        <a href="/manage/managestore">RETURN TO THE MENU</a>
     </div>
     <div id="Main">
         <div id="Sidebar">
+            <div>
+                <p>查询Item</p>
+                <form action="/manage/searchItem"  method="post" style="position: relative">
+                    <input type="text" name="keyword" size="14" />
+                    <input type="submit" name="searchItem" value="Search" />
+                    <div id="context1" style="position: relative;background-color:white; border: 1px solid red;display:none" >
+                    </div>
+                </form>
+                <p th:text="${msg}">Error Message</p>
+            </div>
             <div id="SidebarContent">
-                <a href="/manage/category">Category<img src="../images/category.jpg" /></a>
+                <a href="/manage/newItemForm">新增Item</a>
                 <br/>
-                <a href="/manage/product">Product <img src="../images/product1.jpg" /></a>
-                <br/>
-                <a href="/manage/item">Item     <img src="../images/item.jpg" /></a>
+                <a href="/manage/allItem">修改/删除Item</a>
                 <br/>
             </div>
         </div>
@@ -34,7 +41,6 @@
     </div>
 </div>
 <div th:replace="common/bottom"></div>
-
 
 </body>
 </html>

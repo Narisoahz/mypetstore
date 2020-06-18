@@ -1,0 +1,35 @@
+body {
+    padding-top: 70px;
+    padding-bottom: 30px;
+}
+
+.theme-dropdown .dropdown-menu {
+    position: static;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.theme-showcase > p > .btn {
+    margin: 5px 0;
+}
+
+.theme-showcase .navbar .container {
+    width: auto;
+}
+#Search{
+     width: 33%;
+     height: 9ex;
+     margin: 0ex 0ex 0ex 0ex;
+     padding: 0ex 0ex 0ex 0ex;
+     border-width: 0ex 0ex .3ex 0px;
+     border-style: solid;
+     border-color: #ccc;
+     float: left;
+     text-align: center;
+     background-color: #000;
+     color: #eaac00;
+     line-height: 9ex;
+     voice-family: "\"}\"";
+     voice-family: inherit;
+     height: 9ex;
+}

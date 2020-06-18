@@ -9,8 +9,7 @@
 <header th:replace="common/top"></header>
 <div id="Content">
 <div id="BackLink">
-    <a th:href="@{/catalog/viewCategory?categoryId=}+${product.categoryId}">
-        Return to <label th:text="${product.categoryId}">Category id</label></a>
+    <a th:href="@{/catalog/viewCategory?categoryId=}+${product.categoryId}"><button type="button" class="btn btn-sm btn-primary" th:text="'Return to '+${product.categoryId}"></button></a>
 </div>
 
 <div id="Catalog">
@@ -26,11 +25,11 @@
             <th>&nbsp;</th>
         </tr>
         <tr th:each="item:${itemList}">
-            <td><a th:href="@{/catalog/viewItem?itemId=}+${item.itemId}" th:text="${item.itemId}">item Id</a></td>
+            <td><a th:href="@{/catalog/viewItem?itemId=}+${item.itemId}"><button type="button" class="btn btn-info" th:text="${item.itemId}">item Id</button></a></td>
             <td th:text="${item.product.productId}">productID</td>
             <td th:text="${item.attribute1}">Item Attributes</td>
             <td th:text="'$'+${#numbers.formatDecimal(item.listPrice,1,2)}">Item List Price</td>
-            <td><a th:href="'/cart/addItemToCart?workingItemId='+${item.itemId}">Add to Cart</a></td>
+            <td><a th:href="'/cart/addItemToCart?workingItemId='+${item.itemId}"><button type="button" class="btn btn-success">Add to Cart</button></a></td>
         </tr>
     </table>
 </div>

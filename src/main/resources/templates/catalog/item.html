@@ -10,7 +10,8 @@
 <div id="Content">
     <div id="BackLink">
         <a th:href="@{/catalog/viewProduct?productId=}+${product.productId}">
-            Return to <label th:text="${product.productId}">productId</label></a>
+            <button type="button" class="btn btn-sm btn-primary" th:text="'Return to '+${product.productId}"></button>
+          </a>
     </div>
 
     <div id="Catalog">
@@ -44,7 +45,7 @@
             </tr>
             <tr>
                 <td>
-                    <a th:href="@{/cart/addItemToCart?workingItemId=}+${item.itemId}">Add to Cart</a>
+                    <a th:href="@{/cart/addItemToCart?workingItemId=}+${item.itemId}"><button type="button" class="btn btn-success">Add to Cart</button></a>
                 </td>
             </tr>
         </table>

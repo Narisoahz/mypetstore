@@ -1,83 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
     <title>Title</title>
-    <link rel="StyleSheet" href="../css/jpetstore.css" type="text/css" media="screen"/>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="../css/theme.css" rel="stylesheet">
 </head>
 <body>
 <header th:fragment="header">
-    <div id="Header">
-
-        <div id="Logo">
-            <div id="LogoContent">
-                <a href="/catalog/view"><img src="../images/logo-topbar.gif" /></a>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">My PetStore</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/catalog/view">Home</a></li>
+                    <li><a href="/Cart/viewCart">Cart</a></li>
+                    <li> <a th:if="${session.account} == null or (!${session.authenticated})" href="/account/signonForm">Sign In</a></li>
+                    <li>  <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/signoff">Sign Out</a></li>
+                    <li> <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/editAccountForm">My Account</a></li>
+                    <li><a href="/manage/signonForm">Manage System</a></li>
+                    <li><a href="../help.html">help</a></li>
+                    <li> <form class="Search" action="/catalog/searchProducts" method="post" style="position:relative;top:10px">
+                        <input type="text" name="keyword" size="14" />
+                        <input type="submit" name="searchProducts" class="btn btn-xs btn-warning" value="Search" />
+                    </form></li>
+                </ul>
             </div>
         </div>
-
-        <div id="Menu">
-            <div id="MenuContent">
-                <a href="/Cart/viewCart">
-                    <img align="middle" name="img_cart"
-                         src="../../images/cart.gif" />
-                </a>
-                <img align="middle" src="../../images/separator.gif" />
-<!--                <c:if test="${sessionScope.account== null}">-->
-<!--                    <a href="viewSignIn">Sign In</a>-->
-<!--                </c:if>-->
-<!--                <c:if test="${sessionScope.account != null}">-->
-<!--                    <%&#45;&#45;            <c:if test="${!sessionScope.account.authenticated}">&#45;&#45;%>-->
-<!--                    <a href="signOff">Sign Out</a>-->
-<!--                </c:if>-->
-<!--                    <%&#45;&#45;            </c:if>&#45;&#45;%>-->
-                <a th:if="${session.account} == null" href="/account/signonForm">Sign In</a>
-                <a th:if="(${session.account} != null) and (${!session.authenticated}) " href="/account/signonForm">Sign In</a>
-                <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/signoff">Sign Out</a>
-                <img th:if="(${session.account} != null) and (${session.authenticated})" align="middle" src="../images/separator.gif" />
-                <a th:if="(${session.account} != null) and (${session.authenticated})" href="/account/editAccountForm">My Account</a>
-                <img align="middle" src="../../images/separator.gif" />
-                <a href="/manage/signonForm">Manage System</a>
-<!--                <img align="middle" src="../images/separator.gif" />-->
-<!--                <a href="editAccount">My Account</a>-->
-                <img align="middle" src="../images/separator.gif" />
-                <a href="../help.html">?</a>
-            </div>
-        </div>
-
-        <div id="Search">
-            <div id="SearchContent">
-                <form action="/catalog/searchProducts" method="post" style="position: relative">
-                    <input type="text" name="keyword" size="14" />
-                    <input type="submit" name="searchProducts" value="Search" />
-                    <div id="context1" style="position: relative;background-color:white; border: 1px solid red;display:none" >
-                    </div>
-                </form>
-            </div>
-
-        </div>
-
-        <div id="QuickLinks">
-            <a href="/catalog/viewCategory?categoryId=FISH">
-                <img src="../images/sm_fish.gif" />
-            </a>
-            <img src="../images/separator.gif" />
-            <a href="/catalog/viewCategory?categoryId=DOGS">
-                <img src="../images/sm_dogs.gif" />
-            </a>
-            <img src="../images/separator.gif" />
-            <a href="/catalog/viewCategory?categoryId=REPTILES">
-                <img src="../images/sm_reptiles.gif" />
-            </a>
-            <img src="../images/separator.gif" />
-            <a href="/catalog/viewCategory?categoryId=CATS">
-                <img src="../images/sm_cats.gif" />
-            </a>
-            <img src="../images/separator.gif" />
-            <a href="/catalog/viewCategory?categoryId=BIRDS">
-                <img src="../images/sm_birds.gif" />
-            </a>
-        </div>
-
+    </nav>
+<!--    <br/>-->
+<!--   <br/>-->
+<!--    <br/>-->
+    <div style="text-align: center;
+    background-color: #FFF;
+    width: 99%;">
+        <a href="/catalog/viewCategory?categoryId=FISH">
+            <img src="../images/sm_fish.gif" />
+        </a>
+        <img src="../images/separator.gif" />
+        <a href="/catalog/viewCategory?categoryId=DOGS">
+            <img src="../images/sm_dogs.gif" />
+        </a>
+        <img src="../images/separator.gif" />
+        <a href="/catalog/viewCategory?categoryId=REPTILES">
+            <img src="../images/sm_reptiles.gif" />
+        </a>
+        <img src="../images/separator.gif" />
+        <a href="/catalog/viewCategory?categoryId=CATS">
+            <img src="../images/sm_cats.gif" />
+        </a>
+        <img src="../images/separator.gif" />
+        <a href="/catalog/viewCategory?categoryId=BIRDS">
+            <img src="../images/sm_birds.gif" />
+        </a>
     </div>
 </header>
 </body>
